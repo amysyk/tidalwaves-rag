@@ -1,5 +1,5 @@
 # Conversational agent for Tidalwaves swim team
-A conversational agent accessible via a web app that answers questions about the Tidalwaves swim team. The agent is powered by a Retrieval-Augmented Generation (RAG) application using OpenAI's GPT-40 mini, Streamlit, and content from Tidalwaves' website.
+A conversational agent accessible via a web app that answers questions about the Tidalwaves swim team. The agent is powered by a Retrieval-Augmented Generation (RAG) application using OpenAI's GPT-40 mini, Langchain, Streamlit, and content from Tidalwaves' website.
 
 ##Goal
 Tidalwaves board members frequently receive questions about our programs that they might not immediately recall. This SMS agent allows board members and other stakeholders to quickly look up program details via text message.
