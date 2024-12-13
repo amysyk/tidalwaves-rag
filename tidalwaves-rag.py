@@ -60,24 +60,35 @@ graph_builder = StateGraph(State).add_sequence([retrieve, generate])
 graph_builder.add_edge(START, "retrieve")
 graph = graph_builder.compile()
 
+# Tell the model today's date
+from datetime import date
+today = date.today()
+relevant_context = f"Todays date is {today}. "
 
-from flask import Flask, request
-app = Flask(__name__)
+import streamlit as st
+st.title("Paulina, your Tidalwaves co-pilot")
 
-@app.route('/', methods=['POST'])
-# ‘/’ URL is bound with hello_world() function.
-def hello_world():
-    question = request.form['Body']
-    # print (request.form['Body'])
-    response = graph.invoke({"question": question})
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    from twilio.twiml.messaging_response import MessagingResponse
+# Display chat messages from history on app rerun
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-    # print(response["answer"])
-    resp = MessagingResponse()
-    resp.message(response["answer"])
+# React to user input
+if input := st.chat_input("Message Paulina"):
+    # Display user message in chat message container
+    st.chat_message("user").markdown(input)
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": input})
 
-    return str(resp)
-
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8085)
+    input = relevant_context + input
+    response = graph.invoke({"question": input})
+    print(input)
+    # Display assistant response in chat message container
+    with st.chat_message("assistant"):
+        st.markdown(response["answer"])
+    # Add assistant response to chat history
+    st.session_state.messages.append({"role": "assistant", "content": response["answer"]})
